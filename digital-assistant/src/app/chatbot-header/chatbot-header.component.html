@@ -1,0 +1,33 @@
+<div class="chatbot-header" (click)="toggleChat()">
+  <p>Wat kan ik voor je doen?</p>
+</div>
+
+<div class="chat-container" *ngIf="isOpen()">
+  <h3>Dag Jan</h3>
+  <h3 class="dark-title">Wat kan ik voor je doen?</h3>
+  <div class="preset-questions">
+    <div class="preset-questions__item-wide" (click)="setQuestion('Hoe kan ik een afspraak maken?')">
+      <div class="icon">1</div>
+      <div class="text">
+        <p>We hebben het aankoopbewijs nog nodig van je nieuwe dak</p>
+        <p class="subtext">voor je woonpremie aanvraag</p>
+      </div>
+    </div>
+    <div class="preset-questions__item" (click)="setQuestion('Wat zijn de openingstijden?')">
+      <div class="icon">2</div>
+      <div class="text">
+        <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
+      </div>
+    </div>
+    <div class="preset-questions__item" (click)="setQuestion('Kan ik een offerte krijgen?')">
+      <div class="icon">3</div>
+      <div class="text">
+        <p>Vind leuke activiteiten in Sint-Niklaas dit weekend.</p>
+      </div>
+    </div>
+  </div>
+  <div class="input-container">
+    <input type="text" [value]="userInput()" (input)="onInput($event)" placeholder="Ik wil of zoek..." />
+    <button (click)="sendMessage()">Verzenden</button>
+  </div>
+</div>
