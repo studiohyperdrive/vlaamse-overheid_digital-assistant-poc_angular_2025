@@ -6,6 +6,6 @@ import { ChatbotHeaderComponent } from '../chatbot-header/chatbot-header.compone
   standalone: true,
   imports: [ChatbotHeaderComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent {}
