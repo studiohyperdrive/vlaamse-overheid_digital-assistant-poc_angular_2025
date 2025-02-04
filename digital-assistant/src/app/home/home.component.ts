@@ -7,6 +7,6 @@ import { ChatbotBannerComponent } from '../chatbot-banner/chatbot-banner.compone
   standalone: true,
   imports: [ChatbotHeaderComponent, ChatbotBannerComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent {}

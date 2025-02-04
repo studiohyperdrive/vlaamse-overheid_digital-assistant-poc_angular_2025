@@ -4,7 +4,7 @@
   left: 50%;
   transform: translateX(-50%);
   background-color: #0055CC;
-  padding: 10px 20px;
+  padding: 15px 25px;
   color: white;
   text-align: center;
   white-space: nowrap;
@@ -12,6 +12,8 @@
   cursor: pointer;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .chat-container {
@@ -20,95 +22,145 @@
   position: absolute;
   left: 0;
   top: 100%;
-  padding: 15px;
+  padding: 20px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-}
-
-.questions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.question-box {
-  background-color: white;
-  color: black;
-  padding: 10px;
-  cursor: pointer;
-  flex: 1 1 calc(40% - 10px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
 }
 
-.question-box.wide {
-  flex: 1.5 1 calc(60% - 10px);
-}
-
-.question-box .icon {
+.chat-title {
   font-size: 24px;
-  margin-bottom: 10px;
+  color: white;
+  margin-bottom: 5px;
 }
 
-.question-box .text {
-  font-size: 14px;
-}
-
-.question-box .subtext {
-  color: lightgray;
-  font-size: 12px;
-}
-
-.input-container {
-  margin-top: 10px;
-  display: flex;
-  gap: 5px;
+.chat-subtitle {
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .preset-questions {
   display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: 10px;
-  color: black;
 
-  &__item-wide {
-    border: 1px solid #b1b3b7;
-    background-color: white;
-    display: inline-block;
-    text-wrap: wrap;
-    width: calc(45% - 26px);
-    box-shadow: 3px 3px 3px #b1b3b7;
-  }
   &__item {
-    border: 1px solid #b1b3b7;
     background-color: white;
-    display: inline-block;
-    text-wrap: wrap;
-    width: 27.5%;
-    box-shadow: 3px 3px 3px #b1b3b7;
+    color: black;
+    padding: 15px;
+    flex: 1 1 25%;  // Makes sure each item takes up 25% of the row
+    max-width: calc(33.3% - 12px); // Ensures proper spacing
+    min-height: 100px;
+    text-align: left;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    box-sizing: border-box;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    .icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .text {
+      font-size: 14px;
+      white-space: normal;  // Allows wrapping
+      word-wrap: break-word; // Ensures long words break
+      overflow-wrap: break-word;
+    }
+
+    .subtext {
+      font-size: 12px;
+      color: gray;
+    }
+  }
+
+  &__item--wide {
+    flex: 1.5 1 40%;  // Takes up 1.5x space
+    max-width: calc(40% - 12px); // Prevents overflow
   }
 }
 
-.input-container input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+.input-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 5px 10px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); // Subtle shadow
+  position: relative; // Needed for icons inside
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 40px 12px 15px; // Space for icons
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: gray;
+    cursor: pointer;
+  }
+
+  .send-icon {
+    right: 15px; // Position send button inside input
+  }
 }
 
-.input-container button {
-  padding: 8px 12px;
-  border: none;
-  background-color: blue;
-  color: white;
-  cursor: pointer;
-  box-sizing: border-box;
+.arrow {
+  position: absolute;
+  right: 0;
+  margin-right: 20px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
 }
 
-.input-container button:hover {
-  background-color: darkblue;
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.message {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  max-width: 60%;
+}
+
+.message.right {
+  background-color: #d1e7dd;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.message.left {
+  background-color: #f8d7da;
+  align-self: flex-start;
+  text-align: left;
 }
