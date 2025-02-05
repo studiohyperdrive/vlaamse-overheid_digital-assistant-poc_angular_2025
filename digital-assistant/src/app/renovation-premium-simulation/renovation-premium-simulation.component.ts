@@ -22,11 +22,11 @@ export class RenovationPremiumSimulationComponent implements OnInit {
   onBannerSelected(selected: boolean) {
     this.loading = true;
 
-    // setTimeout(() => {
-    //   this.loading = false;
-    //   this.selected = selected;
-    //   this.bannerText = 'Ik heb de onderstaande vragen alvast waar mogelijk voor je ingevuld.<br />Controleer jij de info en vul je verder aan?';
-    // }, 2000);
+    setTimeout(() => {
+      this.loading = false;
+      this.selected = selected;
+      this.bannerText = 'Ik heb de onderstaande vragen alvast waar mogelijk voor je ingevuld.<br />Controleer jij de info en vul je verder aan?';
+    }, 2000);
   }
 
   onTooltipClick() {
