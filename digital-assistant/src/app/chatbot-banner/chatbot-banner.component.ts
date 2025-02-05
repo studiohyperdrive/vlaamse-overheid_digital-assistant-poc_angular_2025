@@ -17,6 +17,7 @@ export class ChatbotBannerComponent {
   @Input() public bannerText: string = '';
   @Input() public buttonType: ButtonType | null = null;
   @Input() public buttonVisible: boolean = true;
+  @Input() public loading: boolean = false;
   @Output() public selected: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   selectOption() {

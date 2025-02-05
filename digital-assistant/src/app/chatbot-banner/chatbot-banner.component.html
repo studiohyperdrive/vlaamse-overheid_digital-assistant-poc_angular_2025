@@ -1,26 +1,31 @@
-<div class="chatbot-banner">
-    <div class="main">
-        <mat-icon class="icon">auto_awesome</mat-icon>
-        <div class="text">
-            <p class="greeting-text">Hey Jan,</p>
-            <p class="main-text" [innerHTML]="bannerText"></p>
+<div [ngClass]="{'chatbot-banner': true, 'loading': loading }">
+    <!-- @if (loading) {
+        <div class="pulse">
+            <mat-icon class="icon">auto_awesome</mat-icon>
         </div>
-    </div>
+    } @else { -->
+        <div class="main">
+            <mat-icon class="icon">auto_awesome</mat-icon>
+            <div class="text">
+                <p class="greeting-text">Hey Jan,</p>
+                <p class="main-text" [innerHTML]="bannerText"></p>
+            </div>
+        </div>
         @if (buttonVisible) {
-    @switch (buttonType) {
-        @case (0) {
-            <a routerLink="/verbouw-premie-sim" class="start-button">
-                <mat-icon class="icon">auto_awesome</mat-icon>
-                Simuleer woonpremie
-            </a>
-        }
-        @case (1) {
-            <button type="button" class="start-button" (click)="selectOption()">
-                <mat-icon class="icon">auto_awesome</mat-icon>
-                Vul in
-            </button>
+            @switch (buttonType) {
+                @case (0) {
+                    <a routerLink="/verbouw-premie-sim" class="start-button">
+                        <mat-icon class="icon">auto_awesome</mat-icon>
+                        Simuleer woonpremie
+                    </a>
+                }
+                @case (1) {
+                    <button type="button" class="start-button" (click)="selectOption()">
+                        <mat-icon class="icon">auto_awesome</mat-icon>
+                        Vul in
+                    </button>
                 }
             }
         }
-    }
+    <!-- } -->
 </div>
