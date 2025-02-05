@@ -9,5 +9,9 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './renovation-premium-simulation.component.scss'
 })
 export class RenovationPremiumSimulationComponent {
+  public selected: boolean = false;
 
+  onBannerSelected(selected: boolean) {
+    this.selected = selected;
+  }
 }
