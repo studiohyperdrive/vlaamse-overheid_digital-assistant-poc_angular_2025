@@ -2,7 +2,7 @@
   <p>
     <mat-icon class="stars">auto_awesome</mat-icon>
     @if (loggedIn) {
-      <a routerLink="/verbouw-premie-sim">verder gaan met de berekening van uw premie?</a>
+      <a routerLink="/verbouw-premie-sim" [queryParams]="{loggedIn: loggedIn}">verder gaan met de berekening van uw premie?</a>
       &nbsp;of&nbsp;
       <a>meer</a>
     } @else {
