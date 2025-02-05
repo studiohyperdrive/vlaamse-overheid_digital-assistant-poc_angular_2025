@@ -4833,7 +4833,10 @@
                                                 nieuw venster)</span></a>.</p>
                                         </div>
                                       </div>
-                                    </div><app-chatbot-banner [bannerText]="'volgens mijn bronnen komt je nieuwe huis perfect in aanmerking voor een woonpremie.<br />Wil je samen een simulatie maken om te controleren dat alles klopt?'" [buttonType]="0"></app-chatbot-banner>
+                                    </div>
+                                    @if (ready) {
+                                      <app-chatbot-banner [bannerText]="'volgens mijn bronnen komt je nieuwe huis perfect in aanmerking voor een woonpremie.<br />Wil je samen een simulatie maken om te controleren dat alles klopt?'" [buttonType]="0"></app-chatbot-banner>
+                                    }
                                     <div class="vl-col--12-12">
                                       <div class="vl-grid vl-grid--is-stacked">
                                         <div class="vl-col--12-12 vl-col--12-12--s vl-col--12-12--xs">
