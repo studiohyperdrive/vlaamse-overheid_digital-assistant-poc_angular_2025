@@ -39,19 +39,30 @@
         line-height: normal;
         text-align: left;
         border-radius: 3px;
-        padding: 0;
         background-color: white;
         font-size: 13pt;
         font-weight: 500;
         text-decoration: none;
+
+        .icon {
+            width: 35px;
+        }
+    }
+
+    a.start-button {
+        padding: 0;
 
         &:visited {
             color: #0055CC;
         }
 
         .icon {
-            width: 35px;
             margin-left: 15px;
         }
+    }
+
+    button.start-button {
+        padding: 15px;
+        gap: 0;
     }
 }

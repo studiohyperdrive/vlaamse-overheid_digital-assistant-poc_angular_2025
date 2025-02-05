@@ -2,6 +2,10 @@ import { Component, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
+enum ButtonType {
+  GoToSimulation, AutoFill
+}
+
 @Component({
   selector: 'app-chatbot-banner',
   imports: [MatIcon, RouterLink],
@@ -10,5 +14,5 @@ import { RouterLink } from '@angular/router';
 })
 export class ChatbotBannerComponent {
   @Input() public bannerText: string = '';
-  @Input() public hasButton: boolean = false;
+  @Input() public buttonType: ButtonType | null = null;
 }
