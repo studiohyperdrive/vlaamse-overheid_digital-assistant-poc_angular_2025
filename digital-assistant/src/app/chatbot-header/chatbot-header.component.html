@@ -15,8 +15,8 @@
     }
   </p>
 </div>
-@if (isOpen() && chatHistory.length < 1) {
-  <div class="chat-container">
+@if (isOpen() && (chatHistory.length < 1) && lastMessage.length < 1) {
+  <div id="chatContainer" class="chat-container">
     @if (loggedIn) {
       <h1 class="chat-title">Dag Jan</h1>
       <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
@@ -44,36 +44,37 @@
     } @else {
       <h1 class="chat-title">Hallo</h1>
       <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
-      <div class="preset-questions-not-logged-in">
-        <div class="preset-questions-not-logged-in__item" (click)="sendPresetQuestion('Hoe kan ik mijn jobbonus claimen?')">
-          <div class="icon"><mat-icon>euro</mat-icon></div>
+      <div class="preset-questions-not-logged-in" >
+        <div class="preset-questions-not-logged-in__item" *ngFor="let question of presetQuestions" (click)="sendPresetQuestion(question.question)">
+          <div class="icon"><mat-icon>{{question.icon}}</mat-icon></div>
           <div class="text">
-            <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
-          </div>
-        </div>
-        <div class="preset-questions-not-logged-in__item" (click)="setQuestion('Kan ik een offerte krijgen?')">
-          <div class="icon"><mat-icon>calendar_today</mat-icon></div>
-          <div class="text">
-            <p>Vind leuke activiteiten in Sint-Niklaas dit weekend.</p>
+            <p>{{question.description}}</p>
           </div>
         </div>
       </div>
     }
-
 
     <div class="input-container">
       <input type="text" [value]="userInput()" (input)="onInput($event)" (keydown.enter)="sendMessage()" placeholder="Ik wil of zoek..." />
       <span class="icon send-icon" (click)="sendMessage()"><mat-icon>send</mat-icon></span>
     </div>
   </div>
-} @else if (isOpen() && chatHistory.length >= 1) {
-<div class="chat-container chat-container-messages">
-    <div class="message-container">
-      <div *ngFor="let message of chatHistory"
+} @else if (isOpen() && (chatHistory.length >= 1 || lastMessage.length > 1)) {
+<div id="chatContainer" class="chat-container chat-container-messages">
+    <div class="message-container" #messageContainer>
+      <div class="anchor"></div>
+      @if (typing) {
+        <p id="typing" class="message left">Een momentje, ik pluis het even voor je uit.</p>
+      }
+      @if (lastMessage.length >= 1) {
+        <div class="message left">
+          <markdown [data]="lastMessage"></markdown>
+        </div>
+      }
+      <div *ngFor="let message of chatHistory | reverse"
            [ngClass]="{'message': true, 'right': message.role === 'user', 'left': message.role === 'assistant'}">
         <markdown [data]="message.content"></markdown>
       </div>
-      <p id="typing" class="message left"></p>
     </div>
 
     <div class="input-container input-container-messages">
