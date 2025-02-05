@@ -1,0 +1,41 @@
+.chatbot-banner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #0055CC;
+
+    .main {
+        color: white;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+
+        .icon {
+            margin: 0 15px;
+        }
+
+        .text p {
+            margin: 0;
+            font-size: 11pt;
+            font-weight: bold;
+
+            &.greeting-text {
+                color: #A3C2ED;
+            }
+        }
+    }
+
+    .start-button {
+        color: #0055CC;
+        display: flex;
+        align-items: center;
+        border: 0;
+        border-radius: 3px;
+        padding: 0 20px;
+        background-color: white;
+        font-size: 13pt;
+        font-weight: 500;
+    }
+}
