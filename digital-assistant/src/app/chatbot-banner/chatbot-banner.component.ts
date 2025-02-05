@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -8,5 +8,6 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './chatbot-banner.component.scss'
 })
 export class ChatbotBannerComponent {
-
+  @Input() public bannerText: string = '';
+  @Input() public hasButton: boolean = false;
 }

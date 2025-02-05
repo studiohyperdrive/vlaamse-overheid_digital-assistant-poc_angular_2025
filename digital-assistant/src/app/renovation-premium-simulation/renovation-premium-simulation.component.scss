@@ -1,0 +1,21 @@
+.mt-6 {
+    margin-top: 6rem;
+}
+
+.selected-property {
+    display: flex !important;
+    align-items: center;
+    gap: 20px;
+
+    .icon {
+        color: #0055CC;
+        padding: 7px;
+        display: flex;
+        border-radius: 8px;
+        border: none;
+
+        &:hover {
+            background-color: #D9E3F5;
+        }
+    }
+}
