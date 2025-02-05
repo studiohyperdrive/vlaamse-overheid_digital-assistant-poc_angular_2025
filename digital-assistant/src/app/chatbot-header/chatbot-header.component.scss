@@ -1,5 +1,7 @@
 :host {
   position: absolute;
+  max-height: 43px;
+  height: 43px;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -12,8 +14,19 @@
   cursor: pointer;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
+  z-index: 1000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbot-header p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 
 .chat-container {
@@ -32,13 +45,15 @@
   font-size: 24px;
   color: white;
   margin-bottom: 5px;
+  text-align: left;
 }
 
 .chat-subtitle {
   font-size: 20px;
-  color: white;
+  color: rgba(255, 255, 255, 0.6);
   font-weight: bold;
   margin-bottom: 20px;
+  text-align: left;
 }
 
 .preset-questions {
@@ -53,8 +68,8 @@
     background-color: white;
     color: black;
     padding: 15px;
-    flex: 1 1 25%;  // Makes sure each item takes up 25% of the row
-    max-width: calc(33.3% - 12px); // Ensures proper spacing
+    flex: 1 1 25%;
+    max-width: calc(30.8% - 12px);
     min-height: 100px;
     text-align: left;
     box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.15);
@@ -73,12 +88,13 @@
     .icon {
       font-size: 22px;
       margin-bottom: 10px;
+      color: #0055CC;
     }
 
     .text {
       font-size: 14px;
-      white-space: normal;  // Allows wrapping
-      word-wrap: break-word; // Ensures long words break
+      white-space: normal;
+      word-wrap: break-word;
       overflow-wrap: break-word;
     }
 
@@ -89,24 +105,27 @@
   }
 
   &__item--wide {
-    flex: 1.5 1 40%;  // Takes up 1.5x space
-    max-width: calc(40% - 12px); // Prevents overflow
+    flex: 1.5 1 45%;
+    max-width: calc(45% - 12px);
   }
 }
 
 .input-container {
+  margin-top: 60px;
   display: flex;
   align-items: center;
   background: white;
   padding: 5px 10px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); // Subtle shadow
-  position: relative; // Needed for icons inside
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  border: 1px solid #8695A8;
+  border-radius: 3px;
 
   input {
     flex: 1;
     border: none;
     outline: none;
-    padding: 12px 40px 12px 15px; // Space for icons
+    padding: 12px 40px 12px 15px;
     font-size: 14px;
     width: 100%;
     box-sizing: border-box;
@@ -117,50 +136,89 @@
     top: 50%;
     transform: translateY(-50%);
     font-size: 18px;
-    color: gray;
+    color: black;
     cursor: pointer;
   }
 
   .send-icon {
-    right: 15px; // Position send button inside input
+    right: 15px;
+    display: flex;
+    align-items: center;
   }
+}
+
+.messages {
+  padding: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  white-space: normal;
+}
+
+.message {
+  display: block;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  &.left {
+    text-align: left;
+    width: 60%;
+  }
+}
+
+#typing {
+  display: block;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .arrow {
   position: absolute;
-  right: 0;
-  margin-right: 20px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
+  right: 15px;
 }
 
-.up {
-  transform: rotate(-135deg);
-  -webkit-transform: rotate(-135deg);
+.stars {
+  position: absolute;
+  left: 15px;
 }
 
-.down {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
+.chat-container-messages {
+  background-color: #ECEFF4;
+  background: #ECEFF4;
+  color: black;
+
+}
+.message-container {
+  overflow-y: auto;
+  height: 400px;
+  width: 100%;
 }
 
-.message {
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 5px;
-  max-width: 60%;
-}
+.input-container-messages {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 5px 10px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  border: 1px solid #8695A8;
+  border-radius: 3px;
+  width: 100%;
+  box-sizing: border-box;
 
-.message.right {
-  background-color: #d1e7dd;
-  align-self: flex-end;
-  text-align: right;
-}
-
-.message.left {
-  background-color: #f8d7da;
-  align-self: flex-start;
-  text-align: left;
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 40px 12px 15px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
