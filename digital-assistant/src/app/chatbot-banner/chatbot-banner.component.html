@@ -1,0 +1,15 @@
+<div class="chatbot-banner">
+    <div class="main">
+        <mat-icon class="icon">auto_awesome</mat-icon>
+        <div class="text">
+            <p class="greeting-text">Hey Jan,</p>
+            <p class="main-text" [innerHTML]="bannerText"></p>
+        </div>
+    </div>
+    @if (hasButton) {
+        <button class="start-button">
+            <mat-icon class="icon">auto_awesome</mat-icon>
+            Start simulatie Woonpremie
+        </button>
+    }
+</div>
