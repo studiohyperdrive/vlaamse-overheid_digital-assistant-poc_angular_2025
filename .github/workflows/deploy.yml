@@ -1,0 +1,59 @@
+name: Deploy
+
+run-name: Deploy to GitHub Pages ${{ github.event.release.tag_name }}
+
+on:
+    release:
+        types: [created]
+
+        # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout the repository
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            # Setup Node.js environment
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+
+            # Install dependencies
+            - name: Install Dependencies
+              run: npm ci
+              working-directory: ./digital-assistant
+
+            # Build the documentation
+            - name: Build app
+              run: npm run build -- --deploy-url /vlaamse-overheid_digital-assistant-poc_angular_2025/
+              working-directory: ./digital-assistant
+
+            - name: Upload static files as artifact
+              id: deployment
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: ./digital-assistant/dist/digital-assistant/browser
+
+        # Deployment job
+    deploy:
+        # Add a dependency to the build job
+        needs: build
+        # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+        permissions:
+            pages: write # to deploy to Pages
+            id-token: write # to verify the deployment originates from an appropriate source
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
