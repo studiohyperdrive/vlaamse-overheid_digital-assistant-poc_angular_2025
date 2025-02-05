@@ -5,11 +5,12 @@ import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { SseClient } from 'ngx-sse-client';
 import { MatIconModule } from '@angular/material/icon';
 import { MockStreamingService } from './stream-endpoint-mock';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-chatbot-header',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, RouterLink],
   templateUrl: './chatbot-header.component.html',
   styleUrls: ['./chatbot-header.component.scss'],
 })
@@ -20,6 +21,7 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   chatHistory: { role: string, content: string }[] = [];
   connectionStatus: string = '';
   private eventSourceSubscription: Subscription | null = null;
+  @Input() loggedIn: boolean = false;
 
   constructor(
     private http: HttpClient,

@@ -1,7 +1,13 @@
 <div class="chatbot-header" (click)="toggleChat()">
   <p>
     <mat-icon class="stars">auto_awesome</mat-icon>
-    Wat kan ik voor je doen?
+    @if (loggedIn) {
+      <a routerLink="/verbouw-premie-sim">verder gaan met de berekening van uw premie?</a>
+      &nbsp;of&nbsp;
+      <a>meer</a>
+    } @else {
+      Wat kan ik voor je doen?
+    }
     @if (isOpen()) {
       <mat-icon class="arrow">keyboard_arrow_up</mat-icon>
     } @else {
@@ -11,33 +17,52 @@
 </div>
 @if (isOpen() && chatHistory.length < 1) {
   <div class="chat-container">
-    <h1 class="chat-title">Dag Jan</h1>
-    <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
+    @if (loggedIn) {
+      <h1 class="chat-title">Dag Jan</h1>
+      <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
+      <div class="preset-questions">
+        <div class="preset-questions__item preset-questions__item--wide" (click)="setQuestion('Hoe kan ik een afspraak maken?')">
+          <div class="icon"><mat-icon>warning_amber</mat-icon><p>1</p></div>
+          <div class="text">
+            <p>We hebben het aankoopbewijs nog nodig van je nieuwe dak</p>
+            <p class="subtext">voor je woonpremie aanvraag</p>
+          </div>
+        </div>
+        <div class="preset-questions__item" (click)="setQuestion('Wat zijn de openingstijden?')">
+          <div class="icon"><mat-icon>euro</mat-icon></div>
+          <div class="text">
+            <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
+          </div>
+        </div>
+        <div class="preset-questions__item" (click)="setQuestion('Kan ik een offerte krijgen?')">
+          <div class="icon"><mat-icon>calendar_today</mat-icon></div>
+          <div class="text">
+            <p>Vind leuke activiteiten in Sint-Niklaas dit weekend.</p>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <h1 class="chat-title">Hallo</h1>
+      <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
+      <div class="preset-questions-not-logged-in">
+        <div class="preset-questions-not-logged-in__item" (click)="setQuestion('Wat zijn de openingstijden?')">
+          <div class="icon"><mat-icon>euro</mat-icon></div>
+          <div class="text">
+            <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
+          </div>
+        </div>
+        <div class="preset-questions-not-logged-in__item" (click)="setQuestion('Kan ik een offerte krijgen?')">
+          <div class="icon"><mat-icon>calendar_today</mat-icon></div>
+          <div class="text">
+            <p>Vind leuke activiteiten in Sint-Niklaas dit weekend.</p>
+          </div>
+        </div>
+      </div>
+    }
 
-    <div class="preset-questions">
-      <div class="preset-questions__item preset-questions__item--wide" (click)="setQuestion('Hoe kan ik een afspraak maken?')">
-        <div class="icon"><mat-icon>warning_amber</mat-icon></div>
-        <div class="text">
-          <p>We hebben het aankoopbewijs nog nodig van je nieuwe dak</p>
-          <p class="subtext">voor je woonpremie aanvraag</p>
-        </div>
-      </div>
-      <div class="preset-questions__item" (click)="setQuestion('Wat zijn de openingstijden?')">
-        <div class="icon"><mat-icon>euro</mat-icon></div>
-        <div class="text">
-          <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
-        </div>
-      </div>
-      <div class="preset-questions__item" (click)="setQuestion('Kan ik een offerte krijgen?')">
-        <div class="icon"><mat-icon>calendar_today</mat-icon></div>
-        <div class="text">
-          <p>Vind leuke activiteiten in Sint-Niklaas dit weekend.</p>
-        </div>
-      </div>
-    </div>
 
     <div class="input-container">
-      <input type="text" [value]="userInput()" (input)="onInput($event)" placeholder="Ik wil of zoek..." />
+      <input type="text" [value]="userInput()" (input)="onInput($event)" (keydown.enter)="sendMessage()" placeholder="Ik wil of zoek..." />
       <span class="icon send-icon" (click)="sendMessage()"><mat-icon>send</mat-icon></span>
     </div>
   </div>
@@ -49,7 +74,7 @@
     </div>
 
     <div class="input-container input-container-messages">
-      <input type="text" [value]="userInput()" (input)="onInput($event)" placeholder="Ik wil of zoek..." />
+      <input type="text" [value]="userInput()" (input)="onInput($event)" (keydown.enter)="sendMessage()" placeholder="Ik wil of zoek..." />
       <span class="icon send-icon" (click)="sendMessage()"><mat-icon>send</mat-icon></span>
     </div>
   </div>
