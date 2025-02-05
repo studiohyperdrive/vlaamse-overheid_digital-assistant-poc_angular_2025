@@ -1,0 +1,36 @@
+.assistent-message-box {
+    position: absolute;
+    top: 0;
+    left: 50px;
+    min-width: 500px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px 3px lightgray;
+
+    h6 {
+        font-size: 1.3rem;
+        color: #0055CC;
+        margin: 0;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        p {
+            margin: 0;
+            color: #6B7381;
+            font-size: 1.3rem;
+
+            a {
+                text-decoration: none;
+                color: #0055CC;
+
+                &:visited {
+                    color: #0055CC;
+                }
+            }
+        }
+    }
+}
