@@ -44,7 +44,7 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
       iconText: '1',
       description: 'We hebben het aankoopbewijs nog nodig van je nieuwe dak voor je woonpremie aanvraag',
       question: 'Waar vind ik mijn woonpremie aanvraag?',
-      response: 'Je kan je woonpremie aanvragen in je burgerprofiel. <a class=\"button-link\" href=\"https://www.burgerprofiel.be/\" target="_blank">Naar je burgerprofiel</a>',
+      response: 'Je vindt je woonpremie aanvraag in je burgerprofiel. <a class=\"button-link\" href=\"https://www.burgerprofiel.be/\" target="_blank">Naar je burgerprofiel</a>',
     }, {
       icon: 'euro',
       description: 'Je hebt recht op een jobbonus. Wil je deze meteen claimen?',
