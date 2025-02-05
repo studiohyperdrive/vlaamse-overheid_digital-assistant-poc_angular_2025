@@ -21,14 +21,14 @@
       <h1 class="chat-title">Dag Jan</h1>
       <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
       <div class="preset-questions">
-        <div class="preset-questions__item preset-questions__item--wide" (click)="setQuestion('Hoe kan ik een afspraak maken?')">
+        <div class="preset-questions__item preset-questions__item--wide" (click)="sendPresetQuestion('something')">
           <div class="icon"><mat-icon>warning_amber</mat-icon><p>1</p></div>
           <div class="text">
             <p>We hebben het aankoopbewijs nog nodig van je nieuwe dak</p>
             <p class="subtext">voor je woonpremie aanvraag</p>
           </div>
         </div>
-        <div class="preset-questions__item" (click)="setQuestion('Wat zijn de openingstijden?')">
+        <div class="preset-questions__item" (click)="sendPresetQuestion('Hoe kan ik mijn jobbonus claimen?')">
           <div class="icon"><mat-icon>euro</mat-icon></div>
           <div class="text">
             <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
@@ -45,7 +45,7 @@
       <h1 class="chat-title">Hallo</h1>
       <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
       <div class="preset-questions-not-logged-in">
-        <div class="preset-questions-not-logged-in__item" (click)="setQuestion('Wat zijn de openingstijden?')">
+        <div class="preset-questions-not-logged-in__item" (click)="sendPresetQuestion('Hoe kan ik mijn jobbonus claimen?')">
           <div class="icon"><mat-icon>euro</mat-icon></div>
           <div class="text">
             <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
@@ -67,15 +67,23 @@
     </div>
   </div>
 } @else if (isOpen() && chatHistory.length >= 1) {
-  <div class="chat-container chat-container-messages">
+<div class="chat-container chat-container-messages">
     <div class="message-container">
-      <div class="messages" [innerHTML]="apiOutput()"></div>
+      <div *ngFor="let message of chatHistory"
+           [ngClass]="{'message': true, 'right': message.role === 'user', 'left': message.role === 'assistant'}">
+        {{ message.content }}
+      </div>
       <p id="typing" class="message left"></p>
     </div>
 
     <div class="input-container input-container-messages">
-      <input type="text" [value]="userInput()" (input)="onInput($event)" (keydown.enter)="sendMessage()" placeholder="Ik wil of zoek..." />
-      <span class="icon send-icon" (click)="sendMessage()"><mat-icon>send</mat-icon></span>
+      <input type="text" [value]="userInput()"
+             (input)="onInput($event)"
+             (keydown.enter)="sendMessage()"
+             placeholder="Ik wil of zoek..." />
+      <span class="icon send-icon" (click)="sendMessage()">
+        <mat-icon>send</mat-icon>
+      </span>
     </div>
   </div>
 }

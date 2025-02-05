@@ -1,10 +1,9 @@
-import { Component, Input, OnDestroy, OnInit, signal, ViewEncapsulation, WritableSignal } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { SseClient } from 'ngx-sse-client';
 import { MatIconModule } from '@angular/material/icon';
-import { MockStreamingService } from './stream-endpoint-mock';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -14,7 +13,9 @@ import { RouterLink } from '@angular/router';
   templateUrl: './chatbot-header.component.html',
   styleUrls: ['./chatbot-header.component.scss'],
 })
+
 export class ChatbotHeaderComponent implements OnInit, OnDestroy {
+  currentMessage: string = '';
   isOpen: WritableSignal<boolean> = signal(false);
   userInput: WritableSignal<string> = signal('');
   apiOutput: WritableSignal<string> = signal('');
@@ -26,7 +27,6 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   constructor(
     private http: HttpClient,
     private sseClient: SseClient,
-    private mockStreamingService: MockStreamingService,
   ) {}
 
   ngOnInit(): void {}
@@ -41,8 +41,8 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
     this.isOpen.set(!this.isOpen());
   }
 
-  sendMessage() {
-    const message = this.userInput();
+  sendMessage(preset?: string) {
+    const message = preset ? preset : this.userInput();
     const code = 'hNDZcDo2B:Wy>9GR^^9wF]GH@yj,i_q:EVtoMMCH_6pN6'; // Replace with the actual code
     const params = new HttpParams().set('code', code);
 
@@ -75,7 +75,6 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = { chatHistory: this.chatHistory };
 
-    // Unsubscribe from any existing SSE connection
     if (this.eventSourceSubscription) {
       this.eventSourceSubscription.unsubscribe();
     }
@@ -87,15 +86,12 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
           try {
             const response = JSON.parse(messageEvent.data);
             if (response.content) {
-              if (response.role) {
-                this.chatHistory.push(response);
-              } else {
-                const lastMessage = this.chatHistory[this.chatHistory.length - 1];
+              const lastMessage = this.chatHistory[this.chatHistory.length - 1];
+              if (lastMessage && lastMessage.role === 'assistant') {
                 lastMessage.content += response.content;
+              } else {
+                this.chatHistory.push({ role: 'assistant', content: response.content });
               }
-              this.renderTypingEffect(response.content);
-            } else {
-              console.warn('Invalid response data:', response);
             }
           } catch (error) {
             console.error('Error parsing SSE data:', error);
@@ -104,15 +100,6 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
         error: (error: any) => {
           console.error('SSE error:', error);
           this.connectionStatus = 'Connection error';
-          if (this.eventSourceSubscription) {
-            this.eventSourceSubscription.unsubscribe();
-          }
-        },
-        complete: () => {
-          console.info('SSE connection closed');
-          if (this.eventSourceSubscription) {
-            this.eventSourceSubscription.unsubscribe();
-          }
         }
       });
   }
@@ -124,53 +111,12 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  // MOCK STREAM SERVICE
-  // sendMessage() {
-  //   const message = this.userInput();
-  //   const code = 'hNDZcDo2B:Wy>9GR^^9wF]GH@yj,i_q:EVtoMMCH_6pN6'; // Replace with the actual code
-  //   const params = new HttpParams().set('code', code);
-
-  //   if (message.trim()) {
-  //     this.chatHistory.push({ role: 'user', content: message });
-  //     this.userInput.set('');
-  //     this.renderMessages();
-
-  //     // Use the mock streaming service instead of the actual HTTP request
-  //     this.setupMockSSEConnection();
-  //   }
-  // }
-
-  // setupMockSSEConnection() {
-  //   this.eventSourceSubscription = this.mockStreamingService.stream().subscribe({
-  //     next: (response: any) => {
-  //       if (response.content) {
-  //         if (response.role) {
-  //           this.chatHistory.push(response);
-  //         } else {
-  //           const lastMessage = this.chatHistory[this.chatHistory.length - 1];
-  //           lastMessage.content += response.content;
-  //         }
-  //         this.renderTypingEffect(response.content);
-  //       } else {
-  //         console.warn('Invalid response data:', response);
-  //       }
-  //     },
-  //     error: (error: any) => {
-  //       console.error('SSE error:', error);
-  //       this.connectionStatus = 'Connection error';
-  //     }
-  //   });
-  // }
-
-  // renderTypingEffect(content: string) {
-  //   const typingElement = document.getElementById('typing');
-  //   if (typingElement) {
-  //     typingElement.innerHTML += content;
-  //   }
-  // }
-
   setQuestion(question: string) {
     this.userInput.set(question);
+  }
+
+  sendPresetQuestion(question: string) {
+    this.sendMessage(question)
   }
 
   onInput(event: Event) {
@@ -179,10 +125,6 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   }
 
   renderMessages() {
-    const messages = this.chatHistory.map(message => {
-      const alignment = message.role === 'user' ? 'right' : 'left';
-      return `<div class="message ${alignment}">${message.role}: ${message.content}</div>`;
-    }).join('');
-    this.apiOutput.set(messages);
+    this.chatHistory = [...this.chatHistory];
   }
 }
