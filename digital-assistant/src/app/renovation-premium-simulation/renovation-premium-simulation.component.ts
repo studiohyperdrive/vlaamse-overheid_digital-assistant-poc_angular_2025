@@ -13,15 +13,20 @@ import { ActivatedRoute } from '@angular/router';
 export class RenovationPremiumSimulationComponent implements OnInit {
   public selected: boolean = false;
   public tooltipActive: boolean = false;
-  loggedIn: boolean = false;
+  loggedIn: boolean = true;
+  loading: boolean = false;
   bannerText = 'Ik kan de onderstaande vragen al zo goed mogelijk voor je invullen.<br />Zal ik starten zodat jij kan controleren en aanvullen?';
 
   constructor(private route: ActivatedRoute) {}
 
   onBannerSelected(selected: boolean) {
-    this.selected = selected;
-    this.bannerText = 'Ik heb de onderstaande vragen alvast waar mogelijk voor je ingevuld.<br />Controleer jij de info even en vul je aan?';
+    this.loading = true;
 
+    // setTimeout(() => {
+    //   this.loading = false;
+    //   this.selected = selected;
+    //   this.bannerText = 'Ik heb de onderstaande vragen alvast waar mogelijk voor je ingevuld.<br />Controleer jij de info en vul je verder aan?';
+    // }, 2000);
   }
 
   onTooltipClick() {

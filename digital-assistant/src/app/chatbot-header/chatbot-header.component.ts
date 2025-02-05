@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, signal, SimpleChanges, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Subscription, timer } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
@@ -7,6 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { ReversePipe } from '../pipes/reverse';
+
+interface Question {
+  icon: string;
+  description: string;
+  question?: string;
+  response?: string;
+  iconText?: string;
+}
 
 @Component({
   selector: 'app-chatbot-header',
@@ -19,15 +27,34 @@ import { ReversePipe } from '../pipes/reverse';
 export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   @Input() loggedIn: boolean = false;
 
-  presetQuestions = [{
-    icon: 'euro',
-    description: 'Je zocht onlangs info op over de jobbonus. Wil je hier mee verder gaan?',
-    question: 'Hoe kan ik mijn jobbonus claimen?',
-  }, {
-    icon: 'calendar_today',
-    description: 'Vind leuke activiteiten in Sint-Niklaas dit weekend.',
-    question: 'Wat kan ik dit weekend doen in Sint-Niklaas?',
-  }];
+  session = 'anonymous';
+
+  presetQuestions: Record<string, Question[]> = {
+    anonymous: [{
+      icon: 'euro',
+      description: 'Je zocht onlangs info op over de jobbonus. Wil je hier mee verder gaan?',
+      question: 'Hoe kan ik mijn jobbonus claimen?',
+    }, {
+      icon: 'calendar_today',
+      description: 'Vind leuke activiteiten in Sint-Niklaas dit weekend.',
+      question: 'Wat kan ik dit weekend doen in Sint-Niklaas?',
+    }],
+    loggedIn: [{
+      icon: 'warning_amber',
+      iconText: '1',
+      description: 'We hebben het aankoopbewijs nog nodig van je nieuwe dak voor je woonpremie aanvraag',
+      question: 'Waar vind ik mijn woonpremie aanvraag?',
+      response: 'Je kan je woonpremie aanvragen in je burgerprofiel. <a class=\"button-link\" href=\"https://www.burgerprofiel.be/\" target="_blank">Naar je burgerprofiel</a>',
+    }, {
+      icon: 'euro',
+      description: 'Je hebt recht op een jobbonus. Wil je deze meteen claimen?',
+      question: 'Hoe kan ik mijn jobbonus claimen?',
+    }, {
+      icon: 'calendar_today',
+      description: 'Vind leuke activiteiten in Sint-Niklaas dit weekend.',
+      question: 'Wat kan ik dit weekend doen in Sint-Niklaas?',
+    }]
+  };
   currentMessage: string = '';
   isOpen: WritableSignal<boolean> = signal(false);
   userInput: WritableSignal<string> = signal('');
@@ -57,8 +84,22 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['loggedIn'].currentValue) {
+      this.session = 'loggedIn';
+    } else {
+      this.session = 'anonymous';
+    }
+  }
+
   toggleChat() {
     this.isOpen.set(!this.isOpen());
+
+    if (!this.isOpen()) {
+      this.chatHistory = [];
+      this.lastMessage = '';
+      this.queue = [];
+    }
   }
 
   sendMessage(preset?: string) {
@@ -137,8 +178,24 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
     this.userInput.set(question);
   }
 
-  sendPresetQuestion(question: string) {
-    this.sendMessage(question)
+  sendPresetQuestion(question: Question) {
+    if (question.response) {
+      if (question.question) {
+        this.chatHistory = this.chatHistory.concat({ role: 'user', content: question.question });
+      }
+
+      this.typing = true;
+
+      setTimeout(() => {
+        this.typing = false;
+        this.chatHistory = this.chatHistory.concat({
+          role: 'assistant',
+          content: question.response as string,
+        });
+      }, 2000);
+    } else if (question.question) {
+      this.sendMessage(question.question)
+    }
   }
 
   onInput(event: Event) {

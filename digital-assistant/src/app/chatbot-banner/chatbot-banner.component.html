@@ -6,6 +6,7 @@
             <p class="main-text" [innerHTML]="bannerText"></p>
         </div>
     </div>
+        @if (buttonVisible) {
     @switch (buttonType) {
         @case (0) {
             <a routerLink="/verbouw-premie-sim" class="start-button">
@@ -18,6 +19,8 @@
                 <mat-icon class="icon">auto_awesome</mat-icon>
                 Vul in
             </button>
+                }
+            }
         }
     }
 </div>

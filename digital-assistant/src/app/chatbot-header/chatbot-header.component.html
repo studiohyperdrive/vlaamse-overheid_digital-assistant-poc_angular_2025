@@ -3,8 +3,6 @@
     <mat-icon class="stars">auto_awesome</mat-icon>
     @if (loggedIn) {
       <a routerLink="/verbouw-premie-sim" [queryParams]="{loggedIn: loggedIn}">verder gaan met de berekening van uw premie?</a>
-      &nbsp;of&nbsp;
-      <a>meer</a>
     } @else {
       Wat kan ik voor je doen?
     }
@@ -17,42 +15,16 @@
 </div>
 @if (isOpen() && (chatHistory.length < 1) && lastMessage.length < 1) {
   <div id="chatContainer" class="chat-container">
-    @if (loggedIn) {
-      <h1 class="chat-title">Dag Jan</h1>
-      <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
-      <div class="preset-questions">
-        <div class="preset-questions__item preset-questions__item--wide" (click)="sendPresetQuestion('something')">
-          <div class="icon"><mat-icon>warning_amber</mat-icon><p>1</p></div>
-          <div class="text">
-            <p>We hebben het aankoopbewijs nog nodig van je nieuwe dak</p>
-            <p class="subtext">voor je woonpremie aanvraag</p>
-          </div>
-        </div>
-        <div class="preset-questions__item" (click)="sendPresetQuestion('Hoe kan ik mijn jobbonus claimen?')">
-          <div class="icon"><mat-icon>euro</mat-icon></div>
-          <div class="text">
-            <p>Je hebt recht op een jobbonus. Wil je deze meteen claimen?</p>
-          </div>
-        </div>
-        <div class="preset-questions__item" (click)="setQuestion('Kan ik een offerte krijgen?')">
-          <div class="icon"><mat-icon>calendar_today</mat-icon></div>
-          <div class="text">
-            <p>Vind leuke activiteiten in Sint-Niklaas dit weekend.</p>
-          </div>
+    <h1 class="chat-title">{{ loggedIn ? 'Dag Jan' : 'Hallo' }}</h1>
+    <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
+    <div class="preset-questions-not-logged-in" >
+      <div class="preset-questions-not-logged-in__item" *ngFor="let question of presetQuestions[session]" (click)="sendPresetQuestion(question)">
+        <div class="icon"><mat-icon>{{question.icon}}</mat-icon>@if (question.iconText) {<p>{{question.iconText}}</p>}</div>
+        <div class="text">
+          <p>{{question.description}}</p>
         </div>
       </div>
-    } @else {
-      <h1 class="chat-title">Hallo</h1>
-      <h1 class="chat-subtitle">Wat kan ik voor je doen?</h1>
-      <div class="preset-questions-not-logged-in" >
-        <div class="preset-questions-not-logged-in__item" *ngFor="let question of presetQuestions" (click)="sendPresetQuestion(question.question)">
-          <div class="icon"><mat-icon>{{question.icon}}</mat-icon></div>
-          <div class="text">
-            <p>{{question.description}}</p>
-          </div>
-        </div>
-      </div>
-    }
+    </div>
 
     <div class="input-container">
       <input type="text" [value]="userInput()" (input)="onInput($event)" (keydown.enter)="sendMessage()" placeholder="Ik wil of zoek..." />
