@@ -19,6 +19,5 @@ export class HomeComponent {
     } else {
       this.loggedIn.set(true);
     }
-    console.log(this.loggedIn());
   }
 }

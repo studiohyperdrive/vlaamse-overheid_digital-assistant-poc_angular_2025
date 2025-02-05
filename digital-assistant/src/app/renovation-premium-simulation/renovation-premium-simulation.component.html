@@ -624,9 +624,9 @@
                   <div class="vlw__primary-bar__plugins">
                     <div class="vlw__primary-bar__plugins__item vlw__profile vlw__popover vlw__popover--align-right">
                       @if (loggedIn) {
-                        <div class="vlw__profile__toggle-wrapper"><button type="button" class="vlw__profile__toggle" aria-expanded="false" aria-controls="vlw-profile-dropdown"><svg viewBox="0 0 34 25" aria-hidden="true" class="vlw__profile__toggle__icon" style="flex: 0 0 34px; height: 25px; width: unset;"><use href="#icon-capacity-BUR-check"></use></svg> <span class="vlw__profile__toggle__name"><span class="vlw__profile__toggle__name__first">Aangemeld</span> <span class="vlw__profile__toggle__name__capacity">E-loket Vlaams Energie- en Klimaatagentschap</span></span> <span class="vlw__profile__toggle__caret-icon vlw__profile__toggle__caret-icon--align-bottom"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-arrow-down-fat"></use></svg></span></button></div>
+                        <div class="vlw__profile__toggle-wrapper" (click)="login()"><button type="button" class="vlw__profile__toggle" aria-expanded="false" aria-controls="vlw-profile-dropdown"><svg viewBox="0 0 34 25" aria-hidden="true" class="vlw__profile__toggle__icon" style="flex: 0 0 34px; height: 25px; width: unset;"><use href="#icon-capacity-BUR-check"></use></svg> <span class="vlw__profile__toggle__name"><span class="vlw__profile__toggle__name__first">Aangemeld</span> <span class="vlw__profile__toggle__name__capacity">E-loket Vlaams Energie- en Klimaatagentschap</span></span> <span class="vlw__profile__toggle__caret-icon vlw__profile__toggle__caret-icon--align-bottom"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-arrow-down-fat"></use></svg></span></button></div>
                       } @else {
-                        <div class="vlw__profile__toggle-wrapper"><button type="button" class="vlw__profile__toggle"><svg
+                        <div class="vlw__profile__toggle-wrapper" (click)="login()"><button type="button" class="vlw__profile__toggle"><svg
                           viewBox="0 0 24 23" aria-hidden="true" class="vlw__profile__toggle__icon">
                           <use href="#icon-capacity-BUR"></use>
                         </svg> <span class="vlw__profile__toggle__name"><span
