@@ -699,7 +699,7 @@
                       </div>
                     </div>
 
-                    <app-chatbot-banner [bannerText]="'ik heb de onderstaande vragen alvast waar mogelijk voor je ingevuld.<br />Controleer jij de info even en vul je aan?'"></app-chatbot-banner>
+                    <app-chatbot-banner [bannerText]="'ik heb de onderstaande vragen alvast waar mogelijk voor je ingevuld.<br />Controleer jij de info even en vul je aan?'" [buttonType]="1" (selected)="onBannerSelected($event)" ></app-chatbot-banner>
 
                     <ul data-drupal-selector="edit-building-age"
                       aria-describedby="edit-building-age--wrapper--description" id="edit-building-age--wrapper"
@@ -733,11 +733,18 @@
                                   <input data-drupal-selector="edit-building-age-3078"
                                     aria-describedby="edit-building-age--description" type="radio"
                                     id="edit-building-age-3078" name="building_age" value="3078"
-                                    class="form-radio vl-radio__toggle" [defaultChecked]="true">
+                                    class="form-radio vl-radio__toggle" [defaultChecked]="selected">
                                   <div class="vl-radio__label">Ouder dan 15 jaar</div>
-                                  <button class="icon" type="button">
-                                    <mat-icon>auto_awesome</mat-icon>
-                                  </button>
+                                  @if (selected) {
+                                    <div style="position: relative;">
+                                      <button class="icon" type="button" [style]="tooltipActive ? 'background-color: #D9E3F5;' : null" (click)="onTooltipClick()">
+                                        <mat-icon>auto_awesome</mat-icon>
+                                      </button>
+                                      @if (tooltipActive) {
+                                        <app-auto-fill-assistent-message></app-auto-fill-assistent-message>
+                                      }
+                                    </div>
+                                  }
                                 </label>
 
                               </div>
