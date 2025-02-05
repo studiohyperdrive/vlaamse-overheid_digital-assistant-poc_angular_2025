@@ -1,6 +1,6 @@
-import { Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { SseClient } from 'ngx-sse-client';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +15,9 @@ import { RouterLink } from '@angular/router';
 })
 
 export class ChatbotHeaderComponent implements OnInit, OnDestroy {
+  response$ = new BehaviorSubject<string>('');
+  private queue: string[] = [];
+  private typingInterval: any;
   currentMessage: string = '';
   isOpen: WritableSignal<boolean> = signal(false);
   userInput: WritableSignal<string> = signal('');
@@ -27,6 +30,7 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   constructor(
     private http: HttpClient,
     private sseClient: SseClient,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {}
@@ -68,6 +72,8 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   }
 
   setupSSEConnection() {
+    this.response$.next('');
+    this.queue = [];
     const code = 'hNDZcDo2B:Wy>9GR^^9wF]GH@yj,i_q:EVtoMMCH_6pN6';
     const params = new HttpParams().set('code', code);
     const url = `https://func-vlaamse-ai-assistent-poc-we-001.azurewebsites.net/api/chat/streaming?${params.toString()}`;
@@ -86,12 +92,8 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
           try {
             const response = JSON.parse(messageEvent.data);
             if (response.content) {
-              const lastMessage = this.chatHistory[this.chatHistory.length - 1];
-              if (lastMessage && lastMessage.role === 'assistant') {
-                lastMessage.content += response.content;
-              } else {
-                this.chatHistory.push({ role: 'assistant', content: response.content });
-              }
+              this.queue.push(...response.content.split(''));
+              this.processTypingEffect();
             }
           } catch (error) {
             console.error('Error parsing SSE data:', error);
@@ -103,6 +105,31 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  typing = false;
+
+  private processTypingEffect() {
+    if (this.typingInterval) return;
+
+    this.typing = true;
+
+    if (this.chatHistory.length === 0 || this.chatHistory[this.chatHistory.length - 1].role !== 'assistant') {
+        this.chatHistory.push({ role: 'assistant', content: '' });
+    }
+
+    this.typingInterval = setInterval(() => {
+        if (this.queue.length > 0) {
+            let lastMessage = this.chatHistory[this.chatHistory.length - 1];
+            lastMessage.content += this.queue.shift();
+            this.cdr.detectChanges();
+        } else {
+            clearInterval(this.typingInterval);
+            this.typingInterval = null;
+            this.typing = false;
+            this.cdr.detectChanges();
+        }
+    }, 10);
+}
 
   renderTypingEffect(content: string) {
     const typingElement = document.getElementById('typing');
