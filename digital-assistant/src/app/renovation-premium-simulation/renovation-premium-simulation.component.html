@@ -703,7 +703,7 @@
                       </div>
                     </div>
                     @if (loggedIn) {
-                      <app-chatbot-banner [bannerText]="'ik heb de onderstaande vragen alvast waar mogelijk voor je ingevuld.<br />Controleer jij de info even en vul je aan?'" [buttonType]="1" (selected)="onBannerSelected($event)" ></app-chatbot-banner>
+                      <app-chatbot-banner [bannerText]="bannerText" [buttonType]="1" (selected)="onBannerSelected($event)" ></app-chatbot-banner>
                     }
 
                     <ul data-drupal-selector="edit-building-age"

@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription, timer } from 'rxjs';
+import { BehaviorSubject, Subscription, timer } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { SseClient } from 'ngx-sse-client';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,19 +33,23 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   userInput: WritableSignal<string> = signal('');
   apiOutput: WritableSignal<string> = signal('');
   chatHistory: { role: string, content: string }[] = [];
-  lastMessage: string = '';
   connectionStatus: string = '';
   typing: boolean = false;
+  response$ = new BehaviorSubject<string>('');
+  lastMessage = '';
+  private queue: string[] = [];
+  private typingInterval: any;
   private eventSourceSubscription: Subscription | null = null;
   private messageTimeoutSubscription: Subscription | null = null;
-  private readonly MESSAGE_TIMEOUT = 1000;
+  private readonly MESSAGE_TIMEOUT = 2000;
 
   constructor(
     private http: HttpClient,
     private sseClient: SseClient,
-  ) {}
+    private cdr: ChangeDetectorRef,
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     if (this.eventSourceSubscription) {
@@ -104,20 +108,15 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
       'POST'
     ).subscribe({
       next: (event: Event) => {
-        if (this.typing) {
-          this.typing = false;
-        }
-
         const messageEvent = event as MessageEvent;
         try {
           const response = this.parseJSON(messageEvent?.data);
 
           if (response?.content) {
-            this.lastMessage += response.content;
+            this.queue.push(...response.content.split(''));
           }
 
-          // Reset the message timeout timer
-          this.resetMessageTimeout();
+          this.processTypingEffect();
         } catch (error) {
           console.error('Error parsing SSE data:', error);
         }
@@ -129,18 +128,9 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.finalizeMessage();
+        this.clearMessageTimeout()
       }
     });
-
-    // Start the initial message timeout timer
-    this.resetMessageTimeout();
-  }
-
-  renderTypingEffect(content: string) {
-    const typingElement = document.getElementById('typing');
-    if (typingElement) {
-      typingElement.innerHTML += content;
-    }
   }
 
   setQuestion(question: string) {
@@ -175,7 +165,7 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
   private resetMessageTimeout() {
     // Clear the existing timer
     if (this.messageTimeoutSubscription) {
-      this.messageTimeoutSubscription.unsubscribe();
+      this.clearMessageTimeout()
     }
 
     // Start a new timer
@@ -189,6 +179,27 @@ export class ChatbotHeaderComponent implements OnInit, OnDestroy {
       this.messageTimeoutSubscription.unsubscribe();
       this.messageTimeoutSubscription = null;
     }
+  }
+
+  private processTypingEffect() {
+    this.typing = false;
+
+    if (this.typingInterval) return;
+
+    this.typingInterval = setInterval(() => {
+      if (this.queue.length > 0) {
+        this.lastMessage += this.queue.shift();
+      } else {
+        clearInterval(this.typingInterval);
+        this.typingInterval = null;
+
+        if (this.lastMessage) {
+          this.resetMessageTimeout();
+        }
+      }
+
+      this.cdr.detectChanges();
+    }, 17);
   }
 
   private finalizeMessage() {

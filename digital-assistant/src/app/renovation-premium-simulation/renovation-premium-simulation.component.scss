@@ -944,8 +944,8 @@
   }
 
   .vl-button--large {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
     font-size: 1.2rem
   }
 
@@ -1142,11 +1142,10 @@
 
   .vl-radio__label:before {
     background-color: #fff;
-    height: 6px;
-    width: 6px;
-    top: 1rem;
-    left: 6px;
-    -webkit-transform: scale(0);
+    height: 10px;
+    width: 10px;
+    top: 12px;
+    left: 4px;
     transform: scale(0);
     -webkit-transition: border-color .2s cubic-bezier(1, .1, 0, .9);
     transition: border-color .2s cubic-bezier(1, .1, 0, .9);
