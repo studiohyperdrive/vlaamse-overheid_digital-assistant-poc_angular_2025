@@ -5,11 +5,12 @@ import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { SseClient } from 'ngx-sse-client';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-chatbot-header',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterLink],
+  imports: [CommonModule, MatIconModule, RouterLink, MarkdownModule],
   templateUrl: './chatbot-header.component.html',
   styleUrls: ['./chatbot-header.component.scss'],
 })

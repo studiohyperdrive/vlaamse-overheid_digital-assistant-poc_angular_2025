@@ -71,7 +71,7 @@
     <div class="message-container">
       <div *ngFor="let message of chatHistory"
            [ngClass]="{'message': true, 'right': message.role === 'user', 'left': message.role === 'assistant'}">
-        {{ message.content }}
+        <markdown [data]="message.content"></markdown>
       </div>
       <p id="typing" class="message left"></p>
     </div>
