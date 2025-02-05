@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     padding: 15px;
+    gap: 15px;
     background-color: #0055CC;
 
     .main {
@@ -14,6 +15,7 @@
 
         .icon {
             margin: 0 15px;
+            width: 35px;
         }
 
         .text p {
@@ -32,10 +34,24 @@
         display: flex;
         align-items: center;
         border: 0;
+        width: auto;
+        gap: 15px;
+        line-height: normal;
+        text-align: left;
         border-radius: 3px;
-        padding: 0 20px;
+        padding: 0;
         background-color: white;
         font-size: 13pt;
         font-weight: 500;
+        text-decoration: none;
+
+        &:visited {
+            color: #0055CC;
+        }
+
+        .icon {
+            width: 35px;
+            margin-left: 15px;
+        }
     }
 }
